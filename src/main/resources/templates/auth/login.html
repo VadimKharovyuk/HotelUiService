@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход - Hotel Management System</title>
+</head>
+<body>
+<div class="container">
+  <h1>Вход в систему</h1>
+
+  <!-- Сообщения об успехе -->
+  <div th:if="${successMessage}" class="success-message">
+    <p th:text="${successMessage}"></p>
+  </div>
+
+  <!-- Сообщения об ошибке -->
+  <div th:if="${errorMessage}" class="error-message">
+    <p th:text="${errorMessage}"></p>
+  </div>
+
+  <!-- Форма входа -->
+  <form th:action="@{/auth/login}" th:object="${loginRequest}" method="post">
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email"
+             id="email"
+             th:field="*{email}"
+             required
+             placeholder="Введите ваш email">
+      <div th:if="${#fields.hasErrors('email')}" class="field-error">
+        <p th:errors="*{email}"></p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Пароль:</label>
+      <input type="password"
+             id="password"
+             th:field="*{password}"
+             required
+             placeholder="Введите ваш пароль">
+      <div th:if="${#fields.hasErrors('password')}" class="field-error">
+        <p th:errors="*{password}"></p>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit">Войти</button>
+    </div>
+  </form>
+
+  <div class="links">
+    <p>Нет аккаунта? <a th:href="@{/auth/register}">Зарегистрироваться</a></p>
+  </div>
+</div>
+</body>
+</html>

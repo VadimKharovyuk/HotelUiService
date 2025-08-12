@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация - Hotel Management System</title>
+</head>
+<body>
+<div class="container">
+  <h1>Регистрация</h1>
+
+  <!-- Сообщения об ошибке -->
+  <div th:if="${errorMessage}" class="error-message">
+    <p th:text="${errorMessage}"></p>
+  </div>
+
+  <!-- Форма регистрации -->
+  <form th:action="@{/auth/register}" th:object="${registerRequest}" method="post">
+    <div class="form-group">
+      <label for="username">Имя пользователя:</label>
+      <input type="text"
+             id="username"
+             th:field="*{username}"
+             required
+             minlength="3"
+             maxlength="20"
+             placeholder="Введите имя пользователя">
+      <div th:if="${#fields.hasErrors('username')}" class="field-error">
+        <p th:errors="*{username}"></p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email"
+             id="email"
+             th:field="*{email}"
+             required
+             placeholder="Введите ваш email">
+      <div th:if="${#fields.hasErrors('email')}" class="field-error">
+        <p th:errors="*{email}"></p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Пароль:</label>
+      <input type="password"
+             id="password"
+             th:field="*{password}"
+             required
+             minlength="6"
+             placeholder="Введите пароль (минимум 6 символов)">
+      <div th:if="${#fields.hasErrors('password')}" class="field-error">
+        <p th:errors="*{password}"></p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="firstName">Имя:</label>
+      <input type="text"
+             id="firstName"
+             th:field="*{firstName}"
+             placeholder="Введите ваше имя">
+      <div th:if="${#fields.hasErrors('firstName')}" class="field-error">
+        <p th:errors="*{firstName}"></p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="lastName">Фамилия:</label>
+      <input type="text"
+             id="lastName"
+             th:field="*{lastName}"
+             placeholder="Введите вашу фамилию">
+      <div th:if="${#fields.hasErrors('lastName')}" class="field-error">
+        <p th:errors="*{lastName}"></p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Телефон:</label>
+      <input type="tel"
+             id="phone"
+             th:field="*{phone}"
+             placeholder="Введите номер телефона">
+      <div th:if="${#fields.hasErrors('phone')}" class="field-error">
+        <p th:errors="*{phone}"></p>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit">Зарегистрироваться</button>
+    </div>
+  </form>
+
+  <div class="links">
+    <p>Уже есть аккаунт? <a th:href="@{/auth/login}">Войти</a></p>
+  </div>
+</div>
+</body>
+</html>
