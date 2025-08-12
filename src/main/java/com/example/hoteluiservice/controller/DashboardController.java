@@ -1,12 +1,15 @@
 package com.example.hoteluiservice.controller;
 import com.example.hoteluiservice.dto.UserDto;
+import com.example.hoteluiservice.dto.UserInfo;
 import com.example.hoteluiservice.service.UserService;
+import com.example.hoteluiservice.util.CurrentUser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/dashboard")
@@ -17,13 +20,8 @@ public class DashboardController {
 
 
     @GetMapping
-    public String dashboard( UserDto user, Model model) {
-        // Пользователь автоматически передается через аннотацию
-        model.addAttribute("user", user);
-
-        // Можете добавить дополнительную логику
-        // model.addAttribute("bookings", bookingService.getUserBookings(user.getId()));
-        // model.addAttribute("favorites", favoriteService.getUserFavorites(user.getId()));
+    public String dashboard(@CurrentUser UserInfo userInfo, Model model) {
+        model.addAttribute("user", userInfo);
 
         return "dashboard";
     }

@@ -3,6 +3,7 @@ package com.example.hoteluiservice.config;
 import com.example.hoteluiservice.dto.UserInfo;
 import com.example.hoteluiservice.util.CurrentUser;
 import com.example.hoteluiservice.util.JwtUtil;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -39,14 +40,12 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
                 return null;
             }
 
-            // Извлекаем токен из заголовка Authorization
-            String authHeader = request.getHeader("Authorization");
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                log.warn("No valid Authorization header found");
+            // ИЗМЕНЕНО: Читаем токен из cookies, а не из заголовка
+            String token = getTokenFromCookies(request);
+            if (token == null) {
+                log.warn("No accessToken cookie found");
                 return null;
             }
-
-            String token = authHeader.substring(7);
 
             // Извлекаем данные пользователя из токена
             String username = jwtUtil.extractUsername(token);
@@ -60,6 +59,8 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
                 return null;
             }
 
+            log.info("Successfully resolved current user: {} (ID: {})", username, userId);
+
             // Создаем объект с информацией о пользователе
             return UserInfo.builder()
                     .id(userId)
@@ -72,5 +73,22 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
             log.error("Error resolving current user: {}", e.getMessage());
             return null;
         }
+    }
+
+    /**
+     * ДОБАВЛЕНО: Метод для извлечения токена из cookies
+     */
+    private String getTokenFromCookies(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("accessToken".equals(cookie.getName())) {
+                    log.debug("Found accessToken cookie");
+                    return cookie.getValue();
+                }
+            }
+        }
+        log.debug("No accessToken cookie found");
+        return null;
     }
 }
