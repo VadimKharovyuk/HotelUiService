@@ -18,11 +18,17 @@ public class DashboardController {
 
     private final UserService userService;
 
-
     @GetMapping
     public String dashboard(@CurrentUser UserInfo userInfo, Model model) {
-        model.addAttribute("user", userInfo);
 
+        // Проверяем авторизацию
+        if (userInfo == null) {
+            log.warn("Unauthorized access attempt to dashboard");
+            return "redirect:/auth/login?error=unauthorized";
+        }
+
+
+        model.addAttribute("user", userInfo);
         return "dashboard";
     }
 }

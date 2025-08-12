@@ -1,10 +1,7 @@
 package com.example.hoteluiservice.service;
 
 import com.example.hoteluiservice.client.UserClient;
-import com.example.hoteluiservice.dto.AuthResponse;
-import com.example.hoteluiservice.dto.LoginRequest;
-import com.example.hoteluiservice.dto.RegisterRequest;
-import com.example.hoteluiservice.dto.UserDto;
+import com.example.hoteluiservice.dto.*;
 
 import com.example.hoteluiservice.exception.AuthException;
 import com.example.hoteluiservice.exception.UserServiceClientException;
@@ -24,6 +21,14 @@ import java.util.Map;
 public class UserService {
 
     private final UserClient userClient;
+
+
+    public void logout(String refreshToken) {
+        RefreshTokenRequest request = new RefreshTokenRequest();
+        request.setRefreshToken(refreshToken);
+        userClient.logout(request);
+    }
+
 
     /**
      * Авторизация пользователя

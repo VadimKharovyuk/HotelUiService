@@ -6,6 +6,7 @@ import com.example.hoteluiservice.exception.AuthException;
 import com.example.hoteluiservice.exception.UserServiceClientException;
 import com.example.hoteluiservice.service.UserService;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -123,6 +124,47 @@ public class AuthController {
             model.addAttribute("errorMessage", "Произошла ошибка. Попробуйте позже.");
             return "auth/register";
         }
+    }
+
+
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response,
+                         RedirectAttributes redirectAttributes) {
+        try {
+            String refreshToken = getRefreshTokenFromCookies(request);
+
+            if (refreshToken != null) {
+                // Вызываем API микросервиса для инвалидации токена
+                userService.logout(refreshToken);
+                log.info("Successfully logged out user via API");
+            }
+
+            // Удаляем все токены из cookies
+            removeTokenCookies(response);
+
+            redirectAttributes.addFlashAttribute("successMessage", "Выход выполнен успешно!");
+            return "redirect:/auth/login";
+
+        } catch (Exception e) {
+            log.error("Logout failed: {}", e.getMessage());
+            // Даже если API недоступен, удаляем cookies локально
+            removeTokenCookies(response);
+            redirectAttributes.addFlashAttribute("errorMessage", "Выход выполнен локально");
+            return "redirect:/auth/login";
+        }
+    }
+
+    private String getRefreshTokenFromCookies(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("refreshToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 
     /**

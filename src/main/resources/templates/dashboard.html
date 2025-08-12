@@ -504,16 +504,26 @@
                     <div class="item-title" th:text="${user?.username ?: 'Пользователь'}">john_doe</div>
                     <div class="item-subtitle" th:text="${user?.email ?: 'email@example.com'}">john.doe@gmail.com</div>
                     <div class="flex items-center gap-8 mt-4">
-            <span class="flex items-center gap-4 stat-change">
-                <i data-lucide="user-check" style="width: 14px; height: 14px;"></i>
-                <span th:text="${user?.role ?: 'USER'}">USER</span>
-            </span>
+                   <span class="flex items-center gap-4 stat-change">
+                       <i data-lucide="user-check" style="width: 14px; height: 14px;"></i>
+                       <span th:text="${user?.role ?: 'USER'}">USER</span>
+                   </span>
                     </div>
                 </div>
             </div>
 
+            <!-- Кнопка выхода -->
+            <form th:action="@{/auth/logout}" method="post">
+                <button type="submit" class="btn btn-secondary" style="display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="log-out" style="width: 16px; height: 16px;"></i>
+                    Выйти из системы
+                </button>
+            </form>
+
         </div>
     </div>
+
+
     <div class="quick-actions">
         <a href="#" class="quick-action-btn" th:href="@{/search}">
             <i data-lucide="search" class="quick-action-icon"></i>

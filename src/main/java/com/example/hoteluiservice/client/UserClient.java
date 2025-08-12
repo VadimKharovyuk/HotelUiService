@@ -1,9 +1,6 @@
 package com.example.hoteluiservice.client;
 
-import com.example.hoteluiservice.dto.AuthResponse;
-import com.example.hoteluiservice.dto.LoginRequest;
-import com.example.hoteluiservice.dto.RegisterRequest;
-import com.example.hoteluiservice.dto.UserDto;
+import com.example.hoteluiservice.dto.*;
 import com.example.hoteluiservice.util.PageResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -26,4 +23,7 @@ public interface UserClient {
     @GetMapping("/api/admin/users")
     PageResponse<UserDto> getAllUsers(@RequestParam Map<String, Object> params,
                                       @RequestHeader("Authorization") String token);
+
+    @PostMapping("/api/auth/logout")
+    ResponseEntity<?> logout(@RequestBody RefreshTokenRequest request);
 }
