@@ -20,71 +20,6 @@
       min-height: 100vh;
     }
 
-    /* Стили навигации */
-    .navbar {
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid #e5e5e5;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: 64px;
-    }
-
-    .logo {
-      font-size: 20px;
-      font-weight: 600;
-      color: #1a1a1a;
-      text-decoration: none;
-    }
-
-    .nav-menu {
-      display: flex;
-      list-style: none;
-      gap: 32px;
-      align-items: center;
-      margin: 0;
-      padding: 0;
-    }
-
-    .nav-link {
-      color: #666;
-      text-decoration: none;
-      font-weight: 400;
-      font-size: 14px;
-      transition: color 0.2s ease;
-    }
-
-    .nav-link:hover,
-    .nav-link.active {
-      color: #1a1a1a;
-    }
-
-    .auth-button {
-      background: #1a1a1a;
-      color: white;
-      padding: 8px 16px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      transition: all 0.2s ease;
-    }
-
-    .auth-button:hover {
-      background: #333;
-      transform: translateY(-1px);
-    }
-
     /* Основной контейнер */
     .main-container {
       max-width: 1200px;
@@ -470,8 +405,6 @@
   </style>
 </head>
 <body>
-<!-- Подключение фрагмента навигации -->
-<div th:replace="~{fragment/navbar :: navbar}"></div>
 
 <div class="main-container">
   <!-- Заголовок страницы -->

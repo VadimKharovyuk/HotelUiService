@@ -1,8 +1,6 @@
 package com.example.hoteluiservice.controller;
-
 import com.example.hoteluiservice.dto.UserDto;
 import com.example.hoteluiservice.service.UserService;
-import com.example.hoteluiservice.util.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +17,7 @@ public class DashboardController {
 
 
     @GetMapping
-    public String dashboard(@CurrentUser UserDto user, Model model) {
+    public String dashboard( UserDto user, Model model) {
         // Пользователь автоматически передается через аннотацию
         model.addAttribute("user", user);
 
