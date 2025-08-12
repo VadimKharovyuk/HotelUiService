@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Management System</title>
 </head>
 <body>
+<div>
+    <h1>Добро пожаловать в Hotel Management System</h1>
+    <p>Система управления отелями</p>
+</div>
 
+<div>
+    <h2>Выберите действие:</h2>
+    <p><a th:href="@{/auth/login}">Войти в систему</a></p>
+    <p><a th:href="@{/auth/register}">Зарегистрироваться</a></p>
+</div>
 </body>
 </html>
