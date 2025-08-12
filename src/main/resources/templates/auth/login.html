@@ -1,58 +1,604 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="ru" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title>Вход - Hotel Management System</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--  <h1>Вход в систему</h1>-->
+
+<!--  &lt;!&ndash; Сообщения об успехе &ndash;&gt;-->
+<!--  <div th:if="${successMessage}" class="success-message">-->
+<!--    <p th:text="${successMessage}"></p>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Сообщения об ошибке &ndash;&gt;-->
+<!--  <div th:if="${errorMessage}" class="error-message">-->
+<!--    <p th:text="${errorMessage}"></p>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Форма входа &ndash;&gt;-->
+<!--  <form th:action="@{/auth/login}" th:object="${loginRequest}" method="post">-->
+<!--    <div class="form-group">-->
+<!--      <label for="email">Email:</label>-->
+<!--      <input type="email"-->
+<!--             id="email"-->
+<!--             th:field="*{email}"-->
+<!--             required-->
+<!--             placeholder="Введите ваш email">-->
+<!--      <div th:if="${#fields.hasErrors('email')}" class="field-error">-->
+<!--        <p th:errors="*{email}"></p>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <div class="form-group">-->
+<!--      <label for="password">Пароль:</label>-->
+<!--      <input type="password"-->
+<!--             id="password"-->
+<!--             th:field="*{password}"-->
+<!--             required-->
+<!--             placeholder="Введите ваш пароль">-->
+<!--      <div th:if="${#fields.hasErrors('password')}" class="field-error">-->
+<!--        <p th:errors="*{password}"></p>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <div class="form-actions">-->
+<!--      <button type="submit">Войти</button>-->
+<!--    </div>-->
+<!--  </form>-->
+
+<!--  <div class="links">-->
+<!--    <p>Нет аккаунта? <a th:href="@{/auth/register}">Зарегистрироваться</a></p>-->
+<!--  </div>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
+
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Вход - Hotel Management System</title>
+  <title>Вход - HotelSearch</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #fafafa;
+      color: #1a1a1a;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Стили навигации */
+    .navbar {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid #e5e5e5;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a1a1a;
+      text-decoration: none;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 32px;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-link {
+      color: #666;
+      text-decoration: none;
+      font-weight: 400;
+      font-size: 14px;
+      transition: color 0.2s ease;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: #1a1a1a;
+    }
+
+    .auth-button {
+      background: #1a1a1a;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .auth-button:hover {
+      background: #333;
+      transform: translateY(-1px);
+    }
+
+    /* Мобильное меню */
+    .mobile-menu-button {
+      display: none;
+      background: none;
+      border: none;
+      color: #1a1a1a;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+    }
+
+    .mobile-menu-button:hover {
+      background: #f5f5f5;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border-bottom: 1px solid #e5e5e5;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-menu.active {
+      display: block;
+    }
+
+    .mobile-nav-item {
+      padding: 16px 24px;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .mobile-nav-item:last-child {
+      border-bottom: none;
+    }
+
+    .mobile-nav-link {
+      color: #1a1a1a;
+      text-decoration: none;
+      font-weight: 400;
+      font-size: 16px;
+      display: block;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* Основной контейнер */
+    .main-container {
+      min-height: calc(100vh - 64px);
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      gap: 80px;
+      align-items: center;
+    }
+
+    /* Информационная секция */
+    .info-section {
+      padding: 40px 0;
+    }
+
+    .info-title {
+      font-size: 36px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .info-subtitle {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .features-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 15px;
+      color: #374151;
+    }
+
+    .feature-icon {
+      width: 20px;
+      height: 20px;
+      color: #1a1a1a;
+      flex-shrink: 0;
+    }
+
+    /* Контейнер формы */
+    .form-container {
+      background: white;
+      border-radius: 12px;
+      padding: 48px;
+      width: 100%;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+      border: 1px solid #e5e5e5;
+    }
+
+    /* Заголовок */
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #666;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    /* Сообщения */
+    .success-message {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+    }
+
+    .success-message p {
+      color: #15803d;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .error-message {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+    }
+
+    .error-message p {
+      color: #dc2626;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    /* Группы форм */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group input {
+      width: 100%;
+      height: 48px;
+      padding: 0 16px;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      font-size: 15px;
+      background: #fafafa;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #1a1a1a;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
+    }
+
+    .form-group input::placeholder {
+      color: #999;
+    }
+
+    /* Ошибки полей */
+    .field-error {
+      margin-top: 6px;
+    }
+
+    .field-error p {
+      color: #dc2626;
+      font-size: 12px;
+      margin: 0;
+    }
+
+    /* Кнопки */
+    .form-actions {
+      margin-bottom: 24px;
+    }
+
+    .form-actions button {
+      width: 100%;
+      height: 48px;
+      background: #1a1a1a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .form-actions button:hover {
+      background: #333;
+      transform: translateY(-1px);
+    }
+
+    .form-actions button:active {
+      transform: translateY(0);
+    }
+
+    /* Ссылки */
+    .links {
+      text-align: center;
+    }
+
+    .links p {
+      font-size: 14px;
+      color: #666;
+      margin: 0;
+    }
+
+    .links a {
+      color: #1a1a1a;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .links a:hover {
+      color: #666;
+    }
+
+    /* Мобильная адаптация */
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+
+      .mobile-menu-button {
+        display: block;
+      }
+
+      .nav-container {
+        padding: 0 16px;
+      }
+
+      .main-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 20px;
+      }
+
+      .info-section {
+        padding: 20px 0;
+        text-align: center;
+        order: 2;
+      }
+
+      .info-title {
+        font-size: 24px;
+      }
+
+      .info-subtitle {
+        font-size: 16px;
+      }
+
+      .form-container {
+        padding: 32px 24px;
+        margin: 0;
+        order: 1;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+    }
+
+    /* Анимации */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-container {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .info-section {
+      animation: fadeInUp 0.6s ease-out 0.1s both;
+    }
+
+    /* Иконки */
+    .icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Body для страницы входа */
+    body {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-  <h1>Вход в систему</h1>
+<!-- Подключение фрагмента навигации -->
+<div th:replace="~{fragment/navbar :: navbar}"></div>
 
-  <!-- Сообщения об успехе -->
-  <div th:if="${successMessage}" class="success-message">
-    <p th:text="${successMessage}"></p>
-  </div>
+<div class="main-container">
+  <!-- Информационная секция -->
+  <div class="info-section">
+    <h2 class="info-title">Добро пожаловать в HotelSearch</h2>
+    <p class="info-subtitle">Найдите идеальный отель для вашего путешествия с нашей удобной платформой бронирования</p>
 
-  <!-- Сообщения об ошибке -->
-  <div th:if="${errorMessage}" class="error-message">
-    <p th:text="${errorMessage}"></p>
+    <ul class="features-list">
+      <li class="feature-item">
+        <i data-lucide="check-circle" class="feature-icon"></i>
+        <span>Более 1 миллиона отелей по всему миру</span>
+      </li>
+      <li class="feature-item">
+        <i data-lucide="shield-check" class="feature-icon"></i>
+        <span>Безопасные платежи и защита данных</span>
+      </li>
+      <li class="feature-item">
+        <i data-lucide="headphones" class="feature-icon"></i>
+        <span>Круглосуточная поддержка клиентов</span>
+      </li>
+      <li class="feature-item">
+        <i data-lucide="star" class="feature-icon"></i>
+        <span>Лучшие цены и специальные предложения</span>
+      </li>
+      <li class="feature-item">
+        <i data-lucide="smartphone" class="feature-icon"></i>
+        <span>Мгновенное подтверждение бронирования</span>
+      </li>
+    </ul>
   </div>
 
   <!-- Форма входа -->
-  <form th:action="@{/auth/login}" th:object="${loginRequest}" method="post">
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <input type="email"
-             id="email"
-             th:field="*{email}"
-             required
-             placeholder="Введите ваш email">
-      <div th:if="${#fields.hasErrors('email')}" class="field-error">
-        <p th:errors="*{email}"></p>
+  <div class="form-container">
+    <h1>Вход в систему</h1>
+    <p class="subtitle">Войдите в свой аккаунт для продолжения</p>
+
+    <!-- Сообщения об успехе -->
+    <div th:if="${successMessage}" class="success-message">
+      <p th:text="${successMessage}"></p>
+    </div>
+
+    <!-- Сообщения об ошибке -->
+    <div th:if="${errorMessage}" class="error-message">
+      <p th:text="${errorMessage}"></p>
+    </div>
+
+    <!-- Форма входа -->
+    <form th:action="@{/auth/login}" th:object="${loginRequest}" method="post">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email"
+               id="email"
+               th:field="*{email}"
+               required
+               placeholder="Введите ваш email">
+        <div th:if="${#fields.hasErrors('email')}" class="field-error">
+          <p th:errors="*{email}"></p>
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label for="password">Пароль:</label>
-      <input type="password"
-             id="password"
-             th:field="*{password}"
-             required
-             placeholder="Введите ваш пароль">
-      <div th:if="${#fields.hasErrors('password')}" class="field-error">
-        <p th:errors="*{password}"></p>
+      <div class="form-group">
+        <label for="password">Пароль</label>
+        <input type="password"
+               id="password"
+               th:field="*{password}"
+               required
+               placeholder="Введите ваш пароль">
+        <div th:if="${#fields.hasErrors('password')}" class="field-error">
+          <p th:errors="*{password}"></p>
+        </div>
       </div>
-    </div>
 
-    <div class="form-actions">
-      <button type="submit">Войти</button>
-    </div>
-  </form>
+      <div class="form-actions">
+        <button type="submit">Войти</button>
+      </div>
+    </form>
 
-  <div class="links">
-    <p>Нет аккаунта? <a th:href="@{/auth/register}">Зарегистрироваться</a></p>
+    <div class="links">
+      <p>Нет аккаунта? <a th:href="@{/auth/register}">Зарегистрироваться</a></p>
+    </div>
   </div>
 </div>
+
+<script>
+  // Инициализация иконок
+  lucide.createIcons();
+
+  // Функция переключения мобильного меню
+  function toggleMobileMenu() {
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenu) {
+      mobileMenu.classList.toggle('active');
+    }
+  }
+
+  // Закрытие мобильного меню при клике вне его
+  document.addEventListener('click', function(event) {
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileButton = document.querySelector('.mobile-menu-button');
+
+    if (mobileMenu && mobileButton &&
+            !mobileMenu.contains(event.target) &&
+            !mobileButton.contains(event.target)) {
+      mobileMenu.classList.remove('active');
+    }
+  });
+
+  // Автофокус на первое поле
+  document.addEventListener('DOMContentLoaded', function() {
+    const emailInput = document.getElementById('email');
+    if (emailInput) {
+      emailInput.focus();
+    }
+  });
+</script>
 </body>
 </html>
