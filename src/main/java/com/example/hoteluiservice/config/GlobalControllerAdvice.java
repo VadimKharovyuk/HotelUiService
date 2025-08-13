@@ -31,6 +31,29 @@ public class GlobalControllerAdvice {
         }
     }
 
+    @ModelAttribute("currentUser")
+    public UserInfo addUserToModel(@CurrentUser UserInfo userInfo,
+                                   HttpServletRequest request,
+                                   HttpServletResponse response) throws IOException {
+
+        String requestURI = request.getRequestURI();
+
+        // Для публичных страниц просто возвращаем userInfo (может быть null)
+        if (isPublicEndpoint(requestURI)) {
+            return userInfo; // Возвращаем как есть, не редиректим
+        }
+
+        if (userInfo == null) {
+            log.warn("Unauthorized access attempt to: {}", requestURI);
+            response.sendRedirect("/auth/login?error=unauthorized");
+            return null;
+        }
+
+        return userInfo;
+    }
+
+
+
     private boolean isPublicEndpoint(String uri) {
         return uri.startsWith("/auth/") ||
                 uri.startsWith("/public/") ||
@@ -39,4 +62,7 @@ public class GlobalControllerAdvice {
                 uri.startsWith("/js/") ||
                 uri.startsWith("/images/");
     }
+
+
+
 }

@@ -154,8 +154,15 @@
             <li><a href="#" class="nav-link" th:href="@{/help}">Помощь</a></li>
         </ul>
 
-        <a href="#" class="auth-button" th:href="@{/auth/login}">Войти</a>
+        <a th:if="${currentUser == null}"
+           href="#"
+           class="auth-button"
+           th:href="@{/auth/login}">Войти</a>
 
+        <a th:if="${currentUser != null}"
+           href="#"
+           class="auth-button"
+           th:href="@{/dashboard}">Личный кабинет</a>
 
         <!-- Мобильное меню кнопка -->
         <button class="mobile-menu-button" onclick="toggleMobileMenu()">
