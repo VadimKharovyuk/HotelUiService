@@ -522,7 +522,6 @@
                         <input type="text"
                                id="username"
                                th:field="*{username}"
-                               th:value="${user.username}"
                                class="form-input"
                                th:classappend="${#fields.hasErrors('username')} ? 'error' : ''"
                                placeholder="Введите имя пользователя">
@@ -541,7 +540,6 @@
                         <input type="email"
                                id="email"
                                th:field="*{email}"
-                               th:value="${user.email}"
                                class="form-input"
                                th:classappend="${#fields.hasErrors('email')} ? 'error' : ''"
                                placeholder="Введите email">
@@ -560,7 +558,6 @@
                         <input type="tel"
                                id="phone"
                                th:field="*{phone}"
-                               th:value="${user.phone}"
                                class="form-input"
                                th:classappend="${#fields.hasErrors('phone')} ? 'error' : ''"
                                placeholder="+7 (999) 123-45-67">
@@ -582,7 +579,6 @@
                         <input type="text"
                                id="firstName"
                                th:field="*{firstName}"
-                               th:value="${user.firstName}"
                                class="form-input"
                                th:classappend="${#fields.hasErrors('firstName')} ? 'error' : ''"
                                placeholder="Введите имя">
@@ -601,7 +597,6 @@
                         <input type="text"
                                id="lastName"
                                th:field="*{lastName}"
-                               th:value="${user.lastName}"
                                class="form-input"
                                th:classappend="${#fields.hasErrors('lastName')} ? 'error' : ''"
                                placeholder="Введите фамилию">

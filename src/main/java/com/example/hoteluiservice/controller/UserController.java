@@ -3,6 +3,7 @@ package com.example.hoteluiservice.controller;
 import com.example.hoteluiservice.dto.UpdateUserDto;
 import com.example.hoteluiservice.dto.UserDto;
 import com.example.hoteluiservice.dto.UserInfo;
+import com.example.hoteluiservice.mapper.UserMapper;
 import com.example.hoteluiservice.service.TokenService;
 import com.example.hoteluiservice.service.UserService;
 import com.example.hoteluiservice.util.CurrentUser;
@@ -29,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserController {
     private final UserService userService;
     private final TokenService tokenService;
+    private final UserMapper userMapper;
 
     @GetMapping
     public String userProfile(Model model, @CurrentUser UserInfo currentUser, HttpServletRequest request) {
@@ -39,9 +41,10 @@ public class UserController {
         String token = tokenService.getTokenFromCookies(request);
         UserDto profile = userService.getCurrentUserProfile(token);
 
-        // Добавляем пользователя и пустой DTO для формы
+        UpdateUserDto updateUserDto = userMapper.toUpdateUserDto(profile);
+
         model.addAttribute("user", profile);
-        model.addAttribute("updateUserDto", new UpdateUserDto());
+        model.addAttribute("updateUserDto", updateUserDto);
 
         return "user/profile";
     }
@@ -73,12 +76,12 @@ public class UserController {
             UserDto updatedUser = userService.updateUserProfile(token, updateUserDto);
 
             redirectAttributes.addFlashAttribute("successMessage", "Профиль успешно обновлен");
-            return "redirect:/user";
+            return "redirect:/profile";
 
         } catch (Exception e) {
             log.error("Error updating profile: {}", e.getMessage());
             redirectAttributes.addFlashAttribute("errorMessage", "Ошибка обновления профиля: " + e.getMessage());
-            return "redirect:/user";
+            return "redirect:/profile";
         }
     }
 }
