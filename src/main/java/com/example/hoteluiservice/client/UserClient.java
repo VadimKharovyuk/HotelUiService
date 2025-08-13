@@ -11,14 +11,22 @@ import java.util.Map;
 @FeignClient(name = "user-service", url = "${user-service.url}")
 public interface UserClient {
 
+    @PutMapping("/api/user/profile")
+    ResponseEntity<UserDto> updateProfile(
+            @RequestHeader("Authorization") String bearerToken,  // передаем токен
+            @RequestBody UpdateUserDto updateDto
+    );
+
+    @GetMapping("/api/user/profile")
+    UserDto getProfile(@RequestHeader("Authorization") String token);
+
     @PostMapping("/api/auth/login")
     AuthResponse login(@RequestBody LoginRequest request);
 
     @PostMapping("/api/auth/register")
     ResponseEntity<?> register(@RequestBody RegisterRequest request);
 
-    @GetMapping("/api/user/profile")
-    UserDto getProfile(@RequestHeader("Authorization") String token);
+
 
     @GetMapping("/api/admin/users")
     PageResponse<UserDto> getAllUsers(@RequestParam Map<String, Object> params,
@@ -26,4 +34,6 @@ public interface UserClient {
 
     @PostMapping("/api/auth/logout")
     ResponseEntity<?> logout(@RequestBody RefreshTokenRequest request);
+
+
 }

@@ -3,8 +3,7 @@ package com.example.hoteluiservice.service;
 import com.example.hoteluiservice.client.UserClient;
 import com.example.hoteluiservice.dto.*;
 
-import com.example.hoteluiservice.exception.AuthException;
-import com.example.hoteluiservice.exception.UserServiceClientException;
+import com.example.hoteluiservice.exception.*;
 import com.example.hoteluiservice.util.PageResponse;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
@@ -75,6 +74,13 @@ public class UserService {
             throw new UserServiceClientException("Failed to get profile: " + e.getMessage());
         }
     }
+
+
+    public UserDto updateUserProfile(String token, UpdateUserDto updateDto) {
+        return userClient.updateProfile(token, updateDto).getBody();
+    }
+
+
 
 
     /**
